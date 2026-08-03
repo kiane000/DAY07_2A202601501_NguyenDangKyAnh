@@ -137,9 +137,9 @@ Ngoài `pytest`, tôi cũng kiểm tra pipeline end-to-end: `python ingest.py` (
 
 ## 4. Dự đoán độ tương tự (Similarity Predictions) — Cá nhân (5 điểm)
 
-Chạy bằng `scripts/run_experiments.py` (phần A) với embedder thật:
-`EMBEDDING_PROVIDER=local` → `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`.
-Dự đoán được ghi **trước** khi chạy (chúng nằm ngay trong hằng `SENTENCE_PAIRS` của script).
+Chạy với embedder thật (`EMBEDDING_PROVIDER=local` → `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`),
+tính điểm từng cặp bằng `compute_similarity(embedder(cau_a), embedder(cau_b))`.
+Dự đoán được ghi **trước** khi chạy.
 
 | Cặp | Câu A | Câu B | Dự đoán | Điểm thực tế | Đúng? |
 |------|-----------|-----------|---------|--------------|-------|
@@ -161,8 +161,8 @@ Dự đoán được ghi **trước** khi chạy (chúng nằm ngay trong hằng
 Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src`. **5 câu hỏi này phải trùng với các thành viên cùng nhóm** (xem `REPORT_NHOM.md`).
 
 > **Cấu hình chạy:** `EMBEDDING_PROVIDER=local` · `data/k3_university` (bộ khởi động, 3 chunk) · `FixedSizeChunker(chunk_size=500, overlap=50)` qua `build_knowledge_base()` · `KnowledgeBaseAgent` + `demo_llm` (LLM giả lập, chưa cấu hình OpenAI key).
-> Lệnh: `PYTHONIOENCODING=utf-8 EMBEDDING_PROVIDER=local python scripts/run_experiments.py` (phần C).
-> **Lưu ý:** đây là bộ câu hỏi tôi **đề xuất** cho nhóm, chạy trên bộ dữ liệu khởi động; khi nhóm chốt corpus 5–10 tài liệu thật và bộ 5 câu hỏi chung, tôi chạy lại script này và cập nhật bảng dưới.
+> Lệnh: `PYTHONIOENCODING=utf-8 EMBEDDING_PROVIDER=local python main.py "<câu hỏi>"` cho từng câu (in ra top-3 kèm score + câu trả lời của agent).
+> **Lưu ý:** đây là bộ câu hỏi tôi **đề xuất** cho nhóm, chạy trên bộ dữ liệu khởi động; khi nhóm chốt corpus 5–10 tài liệu thật và bộ 5 câu hỏi chung, tôi chạy lại và cập nhật bảng dưới.
 
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
 |---|-------|--------------------------------|-------|-----------|------------------------|
