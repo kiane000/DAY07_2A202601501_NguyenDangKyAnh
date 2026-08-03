@@ -1,7 +1,7 @@
 # Báo Cáo Cá Nhân — Lab 7: Embedding & Vector Store
 
 **Họ tên:** Vũ Thành Dương
-**Nhóm:** A7
+**Nhóm:** [Tên nhóm]
 **Ngày:** 03/08/2026
 
 > **Nộp 1 bản / sinh viên.** Phần nhóm (lựa chọn tài liệu, thiết kế chiến lược, bộ câu hỏi đánh giá, demo) nộp chung 1 bản trong `REPORT_NHOM.md`. Chi tiết thang điểm: `docs/SCORING.md`.
@@ -98,7 +98,7 @@ rootdir: D:\DAY07_2A202602007_VuThanhDuong
 
 plugins: anyio-4.13.0
 
-collected 42 items                                                                                                          
+collected 42 items                                                                                                        
 
 
 
@@ -201,13 +201,13 @@ D:\DAY07_2A202602007_VuThanhDuong>
 
 ## 4. Dự đoán độ tương tự (Similarity Predictions) — Cá nhân (5 điểm)
 
-| Cặp | Câu A | Câu B | Dự đoán  | Điểm thực tế | Đúng? |
-| ---- | ------ | ------ | ----------- | ---------------- | ------- |
-| 1    | Sinh viên đăng ký học phần trong cổng học vụ. | Người học chọn môn trên hệ thống học vụ. | cao | 0.055 | Sai |
-| 2    | Thư viện cung cấp mượn tài liệu. | Người dùng có thể mượn sách tại thư viện. | cao | 0.153 | Sai |
-| 3    | Sinh viên gặp lỗi trùng lịch khi đăng ký. | Người dùng cần mang thẻ định danh khi mượn tài liệu. | thấp | 0.021 | Đúng |
-| 4    | Học phần có thể yêu cầu học phần tiên quyết. | Trước khi đăng ký cần kiểm tra điều kiện môn học. | cao | -0.054 | Sai |
-| 5    | Thư viện có không gian học tập. | Yêu cầu ngoại lệ gửi qua kênh hỗ trợ học vụ. | thấp | 0.014 | Đúng |
+| Cặp | Câu A                                                 | Câu B                                                          | Dự đoán | Điểm thực tế | Đúng? |
+| ---- | ------------------------------------------------------ | --------------------------------------------------------------- | ---------- | ---------------- | ------- |
+| 1    | Sinh viên đăng ký học phần trong cổng học vụ. | Người học chọn môn trên hệ thống học vụ.              | cao        | 0.055            | Sai     |
+| 2    | Thư viện cung cấp mượn tài liệu.                | Người dùng có thể mượn sách tại thư viện.            | cao        | 0.153            | Sai     |
+| 3    | Sinh viên gặp lỗi trùng lịch khi đăng ký.      | Người dùng cần mang thẻ định danh khi mượn tài liệu. | thấp      | 0.021            | Đúng  |
+| 4    | Học phần có thể yêu cầu học phần tiên quyết. | Trước khi đăng ký cần kiểm tra điều kiện môn học.   | cao        | -0.054           | Sai     |
+| 5    | Thư viện có không gian học tập.                  | Yêu cầu ngoại lệ gửi qua kênh hỗ trợ học vụ.          | thấp      | 0.014            | Đúng  |
 
 **Kết quả nào bất ngờ nhất? Điều này nói gì về cách embeddings biểu diễn ý nghĩa?**
 
@@ -219,19 +219,19 @@ D:\DAY07_2A202602007_VuThanhDuong>
 
 Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src`. **5 câu hỏi này phải trùng với các thành viên cùng nhóm** (xem `REPORT_NHOM.md`).
 
-| # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
-| - | ----------------- | ------------------------------------------ | ------------ | --------------------------------- | ------------------------------------- |
-| 1 | Sinh vien dang ky hoc phan o dau? | Top-1 là `Dịch vụ thư viện` score 0.034; chunk liên quan `Đăng ký học phần` xuất hiện ở Top-2/Top-3. | 0.034 | Có trong top-3 | Agent demo chỉ in preview prompt, chưa sinh câu trả lời thật. |
-| 2 | Can kiem tra gi truoc khi xac nhan dang ky hoc phan? | Top-1 là `Đăng ký học phần` score 0.214, có nội dung về điều kiện trước khi xác nhận đăng ký. | 0.214 | Có | Agent demo chỉ in preview prompt, chưa sinh câu trả lời thật. |
-| 3 | Khi bi trung lich hoc phan thi sinh vien lam gi? | Top-1 là `Đăng ký học phần` score 0.167, có nội dung sinh viên điều chỉnh lớp học phần trước thời hạn công bố. | 0.167 | Có | Agent demo chỉ in preview prompt, chưa sinh câu trả lời thật. |
-| 4 | Ai co the su dung dich vu thu vien? | Top-1 là `Đăng ký học phần` score 0.081; chunk liên quan `Dịch vụ thư viện` xuất hiện ở Top-3. | 0.081 | Có trong top-3 | Agent demo chỉ in preview prompt, chưa sinh câu trả lời thật. |
-| 5 | Khi muon tai lieu o thu vien can mang gi? | Top-1 là `Đăng ký học phần` score 0.002; chunk liên quan `Dịch vụ thư viện` xuất hiện ở Top-2. | 0.002 | Có trong top-3 | Agent demo chỉ in preview prompt, chưa sinh câu trả lời thật. |
+| # | Câu hỏi (Query)                                                                                                                                           | Top-1 Chunk truy xuất được (tóm tắt)                                                                                                                                      | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt)                                                                                |
+| - | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| 1 | Để đăng ký học phần thành công trên SIS, sinh viên cần thao tác theo những bước nào và trạng thái nào xác nhận đã đăng ký xong? | Top-1 là`course-registration.md`, chứa hướng dẫn đăng nhập SIS, vào Course Registration, chọn kỳ, Add/Register và trạng thái `Registered`.                    | 0.743        | Có                               | Agent demo đưa đúng ngữ cảnh về các bước đăng ký học phần trên SIS.                                  |
+| 2 | Nếu lớp đã đầy, bị trùng lịch hoặc chưa đạt điều kiện tiên quyết khi đăng ký môn, sinh viên nên làm gì?                           | Top-1 là`summer-2026-student-portal-registration.md`, chứa nội dung về trạng thái `Full`, `Conflict` và kiểm tra điều kiện tiên quyết khi đăng ký.        | 0.715        | Có                               | Agent demo dùng đúng ngữ cảnh xử lý lỗi thường gặp khi đăng ký môn.                                   |
+| 3 | Sinh viên đại học được mượn tối đa bao nhiêu tài liệu thư viện và trong thời hạn bao lâu?                                               | Top-1 là`library-borrowing-privileges.md`, nêu sinh viên đại học được mượn tối đa 3 tài liệu, mỗi tài liệu trong 2 tuần.                                   | 0.713        | Có                               | Agent demo đưa đúng ngữ cảnh về quyền mượn tài liệu thư viện.                                          |
+| 4 | Thư viện VinUni mở cửa vào giờ nào trong học kỳ, và khu nào mở 24/7?                                                                            | Top-1 là`library-services.md`, chứa giờ mở cửa T2-T6 8:00-21:00, T7-CN 9:00-17:00 và khu học tập 24/7.                                                                | 0.789        | Có                               | Agent demo đưa đúng ngữ cảnh về giờ mở cửa thư viện và khu học tập 24/7.                              |
+| 5 | Nếu không hoàn thành học phí đúng hạn từ một tuần, sinh viên sẽ bị hạn chế gì?                                                            | Top-1 là`library-borrowing-privileges.md`; Top-3 không có chunk tài chính đúng về học phí, nên kết quả truy xuất bị lệch sang thư viện/Summer registration. | 0.549        | Không                            | Agent demo không có đủ ngữ cảnh tài chính đúng, nên chưa trả lời được hạn chế do chậm học phí. |
 
-**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** 5 / 5
+**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** 4 / 5
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
 
-> Khi dùng `_mock_embed`, kết quả truy xuất chưa phản ánh đúng ngữ nghĩa: một số câu hỏi về thư viện lại trả về chunk đăng ký học phần. Điều này cho thấy mock embeddings phù hợp để kiểm thử pipeline nhưng không phù hợp để đánh giá chất lượng truy xuất thật. Để cải thiện, nên dùng embedding model thật và có thể lọc metadata theo `department` khi câu hỏi thuộc một phạm vi rõ như thư viện hoặc học vụ.
+> Khi dùng embedding thật (`text-embedding-3-small`), các câu hỏi về đăng ký học phần và thư viện được truy xuất tốt hơn nhiều so với mock embedding. Tuy nhiên Q5 cho thấy nếu câu hỏi thuộc phạm vi tài chính nhưng không dùng metadata filter thì hệ thống vẫn có thể lấy nhầm chunk từ thư viện hoặc đăng ký học phần. Vì vậy, ngoài việc chọn embedding model tốt, cần kết hợp filter theo `department`, ví dụ `finance`, cho các câu hỏi có phạm vi rõ.
 
 ---
 
@@ -239,9 +239,9 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 
 | Tiêu chí                                           | Điểm tự đánh giá |
 | ---------------------------------------------------- | ---------------------- |
-| Khởi động (Warm-up)                               | 5 / 5                    |
-| Hướng tiếp cận của tôi (My Approach)           | 10 / 10                   |
-| Hoàn thiện code (Core Implementation — tests)     | 30 / 30                   |
-| Dự đoán độ tương tự (Similarity Predictions) | 2 / 5                    |
-| Kết quả truy xuất của tôi (Competition Results) | 10 / 10                   |
-| **Tổng phần cá nhân**                      | **57 / 60**         |
+| Khởi động (Warm-up)                               | 5 / 5                  |
+| Hướng tiếp cận của tôi (My Approach)           | 10 / 10                |
+| Hoàn thiện code (Core Implementation — tests)     | 30 / 30                |
+| Dự đoán độ tương tự (Similarity Predictions) | 2 / 5                  |
+| Kết quả truy xuất của tôi (Competition Results) | 8 / 10                 |
+| **Tổng phần cá nhân**                      | **55 / 60**      |
