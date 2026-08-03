@@ -1,3 +1,16 @@
+---
+doc_id: vinuni-financial-regulation-2023-2024
+title: Quy định tài chính năm học 2023-2024
+audience: student
+department: finance
+topic: tuition_finance
+language: vi
+source_url: https://vinuni.edu.vn/wp-content/uploads/2023/09/Quy-dinh-tai-chinh-NH23-24.pdf
+retrieved_at: 2026-08-03
+document_version: "2023-2024"
+license_or_permission: public-pdf
+---
+
 # Quy-dinh-tai-chinh-NH23-24.pdf
 
 Source: https://vinuni.edu.vn/wp-content/uploads/2023/09/Quy-dinh-tai-chinh-NH23-24.pdf

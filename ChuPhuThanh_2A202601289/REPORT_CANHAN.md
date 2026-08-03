@@ -1,7 +1,7 @@
 # Báo Cáo Cá Nhân — Lab 7: Embedding & Vector Store
 
 **Họ tên:** Chu Phú Thành
-**Nhóm:** [Tên nhóm]
+**Nhóm:** Nhóm K3 — Dịch vụ và quy định đại học
 **Ngày:** 3/8/2026
 
 > **Nộp 1 bản / sinh viên.** Phần nhóm (lựa chọn tài liệu, thiết kế chiến lược, bộ câu hỏi đánh giá, demo) nộp chung 1 bản trong `REPORT_NHOM.md`. Chi tiết thang điểm: `docs/SCORING.md`.
@@ -118,17 +118,17 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
 | - | ----------------- | ------------------------------------------ | ------------ | --------------------------------- | ------------------------------------- |
-| 1 |                   |                                            |              |                                   |                                       |
-| 2 |                   |                                            |              |                                   |                                       |
-| 3 |                   |                                            |              |                                   |                                       |
-| 4 |                   |                                            |              |                                   |                                       |
-| 5 |                   |                                            |              |                                   |                                       |
+| 1 | Để đăng ký học phần thành công trên SIS, sinh viên cần thao tác theo những bước nào và trạng thái nào xác nhận đã đăng ký xong? | Hướng dẫn SIS: đăng nhập, vào `Academics → Course Registration`, chọn kỳ khi đăng ký mở, chọn môn rồi `Add` và `Register`. | 0.7906 | Có — đúng ở Top-1. | Hoàn tất khi trạng thái môn là **Registered**; `Selected` chưa phải đăng ký thành công. |
+| 2 | Nếu lớp đã đầy, bị trùng lịch hoặc chưa đạt điều kiện tiên quyết khi đăng ký môn, sinh viên nên làm gì? | Top-1 nói về việc đổi lớp khi một lớp bị hủy; chunk hướng dẫn đúng xuất hiện ở Top-2. | 0.7535 | Có — tài liệu hướng dẫn SIS ở Top-2. | Kiểm tra điều kiện tiên quyết và lịch; khi lớp đầy, trùng lịch hoặc có lỗi cần liên hệ Phòng Quản lý Đào tạo. SIS không có danh sách chờ. |
+| 3 | Sinh viên đại học được mượn tối đa bao nhiêu tài liệu thư viện và trong thời hạn bao lâu? | Quyền mượn của sinh viên đại học: tối đa 3 tài liệu, mỗi tài liệu 2 tuần. | 0.7847 | Có — đúng ở Top-1. | Sinh viên đại học được mượn tối đa **3 tài liệu** trong **2 tuần/tài liệu**. |
+| 4 | Thư viện VinUni mở cửa vào giờ nào trong học kỳ, và khu nào mở 24/7? | Giờ cổng chính T2–T6 là 8:00–21:00, T7–CN là 9:00–17:00; khu học tập 24/7 luôn mở. | 0.7641 | Có — đúng ở Top-1. | Cổng chính mở theo giờ nêu trên; khu học tập **24/7** mở liên tục. |
+| 5 | Nếu không hoàn thành học phí đúng hạn từ một tuần, sinh viên sẽ bị hạn chế gì? | Top-1 thuộc tài liệu tài chính nhưng là chunk về điều kiện/chính sách khác, không chứa hạn chế đăng ký môn. | 0.8140 | Không — Top-3 của SentenceChunker chưa có chunk chứa điều khoản đúng. | Chưa thể trả lời đáng tin cậy từ Top-3; RecursiveChunker kết hợp filter `department=finance` truy xuất được đúng điều khoản. |
 
-**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** __ / 5
+**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** **4 / 5**
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
 
-> *Viết 2-3 câu:*
+> SentenceChunker với tối đa ba câu mỗi chunk cho kết quả tốt với các tài liệu hướng dẫn ngắn, vì một quy trình hoặc một quy định thường được giữ trọn trong cùng chunk. Metadata pre-filtering giúp loại bớt nhiễu giữa các phòng ban: với câu hỏi giờ mở cửa, lọc `department=library` giữ lại các chunk thư viện thay vì cả các quy định học vụ và tài chính. Câu hỏi học phí cho thấy cần bổ sung metadata cho tài liệu PDF và thử chunk nhỏ hơn theo tiêu đề/mục để tránh chunk quá rộng.
 
 
 ---
@@ -141,5 +141,5 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 | Hướng tiếp cận của tôi (My Approach)           | 10 / 10                |
 | Hoàn thiện code (Core Implementation — tests)     | 30 / 30                |
 | Dự đoán độ tương tự (Similarity Predictions) | 5 / 5                  |
-| Kết quả truy xuất của tôi (Competition Results) | / 10                   |
-| **Tổng phần cá nhân**                      | **/ 60**         |
+| Kết quả truy xuất của tôi (Competition Results) | 8 / 10                   |
+| **Tổng phần cá nhân**                      | **58 / 60**         |

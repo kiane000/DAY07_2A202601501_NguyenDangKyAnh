@@ -1,4 +1,15 @@
-
+---
+doc_id: vinuni-undergraduate-credit-regulation
+title: Quy chế đào tạo đại học hệ chính quy theo hệ thống tín chỉ
+audience: student
+department: registrar
+topic: academic_regulations
+language: vi
+source_url: VU_HT03.VN_QC-dao-tao-dai-hoc-he-chinh-quy-theo-he-thong-tin-chi
+retrieved_at: 2026-08-03
+document_version: "2024-05-21"
+license_or_permission: provided-document
+---
 
 ## **QUY CHẾ ĐÀO TẠO ĐẠI HỌC HỆ CHÍNH QUY THEO HỆ THỐNG TÍN CHỈ** 
 
