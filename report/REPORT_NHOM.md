@@ -1,7 +1,7 @@
 # Báo Cáo Nhóm — Lab 7: Embedding & Vector Store
 
-**Nhóm:** Nhóm K3 — Dịch vụ và quy định đại học
-**Thành viên:** Nguyễn Đặng Kỳ Anh, Chu Phú Thành, Lê Thành Nam, Vũ Thành Dương
+**Nhóm:** A7
+**Thành viên:** Nguyễn Đặng Kỳ Anh, Chu Phú Thành, Lê Thành Nam, Vũ Thành Dương, Phạm Thế Trung
 **Ngày:** 03/08/2026
 
 > **Nộp 1 bản / nhóm.** Phần cá nhân (hướng tiếp cận, kết quả riêng, dự đoán…) mỗi thành viên nộp riêng trong `REPORT_CANHAN.md`. Chi tiết thang điểm: `docs/SCORING.md`.
