@@ -1,7 +1,7 @@
 # Báo Cáo Cá Nhân — Lab 7: Embedding & Vector Store
 
 **Họ tên:** Lê Thành Nam (MSSV 2A202601397)
-**Nhóm:** [Tên nhóm]
+**Nhóm:** A7
 **Ngày:** 2026-08-03
 
 > **Nộp 1 bản / sinh viên.** Phần nhóm (lựa chọn tài liệu, thiết kế chiến lược, bộ câu hỏi đánh giá, demo) nộp chung 1 bản trong `REPORT_NHOM.md`. Chi tiết thang điểm: `docs/SCORING.md`.
@@ -160,25 +160,26 @@ Dự đoán được ghi **trước** khi chạy.
 
 Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src`. **5 câu hỏi này phải trùng với các thành viên cùng nhóm** (xem `REPORT_NHOM.md`).
 
-> **Cấu hình chạy:** `EMBEDDING_PROVIDER=local` · `data/k3_university` (bộ khởi động, 3 chunk) · `FixedSizeChunker(chunk_size=500, overlap=50)` qua `build_knowledge_base()` · `KnowledgeBaseAgent` + `demo_llm` (LLM giả lập, chưa cấu hình OpenAI key).
-> Lệnh: `PYTHONIOENCODING=utf-8 EMBEDDING_PROVIDER=local python main.py "<câu hỏi>"` cho từng câu (in ra top-3 kèm score + câu trả lời của agent).
-> **Lưu ý:** đây là bộ câu hỏi tôi **đề xuất** cho nhóm, chạy trên bộ dữ liệu khởi động; khi nhóm chốt corpus 5–10 tài liệu thật và bộ 5 câu hỏi chung, tôi chạy lại và cập nhật bảng dưới.
+> **Cấu hình chạy:** `EMBEDDING_PROVIDER=local` · `data/data_vinuni` (bộ dữ liệu nhóm, 9 tài liệu, 264 chunk) · `FixedSizeChunker(chunk_size=500, overlap=50)` qua `build_knowledge_base()` · `KnowledgeBaseAgent` + `demo_llm` (LLM giả lập).
+> Lệnh: `PYTHONIOENCODING=utf-8 BENCHMARK_CHUNKER=fixed python benchmark.py` cho 5 câu hỏi đánh giá chuẩn của nhóm.
 
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
 |---|-------|--------------------------------|-------|-----------|------------------------|
-| 1 | Sinh viên đăng ký học phần ở đâu và theo lịch nào? | `k3-course-registration::chunk_1` — "…điều chỉnh lớp học phần trước thời hạn…" | 0.570 | Không — chunk chứa đáp án ("cổng học vụ theo lịch từng học kỳ") nằm ở **rank 2** (0.392) | Có ngữ cảnh đúng ở [2]; agent trả lời được nhờ vẫn nhận cả 3 chunk |
-| 2 | Học phần tiên quyết được xử lý thế nào khi đăng ký? | `k3-course-registration::chunk_1` — chỉ chứa mảnh "trước khi xác nhận đăng ký" | 0.540 | Một phần — câu đầy đủ về học phần tiên quyết ở **rank 2** (0.418) | Ngữ cảnh đủ để trả lời "phải kiểm tra điều kiện tiên quyết trước khi xác nhận" |
-| 3 | Khi bị trùng lịch học thì sinh viên phải làm gì? | `k3-course-registration::chunk_1` — "điều chỉnh lớp học phần trước thời hạn điều chỉnh được công bố" | 0.538 | Có, đúng top-1 | "Điều chỉnh lớp học phần trước thời hạn công bố; ngoại lệ gửi kênh hỗ trợ học vụ" |
-| 4 | Muốn mượn tài liệu ở thư viện cần mang theo gì? | `k3-library-services::chunk_0` — chứa "cần mang thẻ định danh hợp lệ khi sử dụng dịch vụ mượn" | 0.626 | Có, đúng top-1 | "Mang thẻ định danh hợp lệ" |
-| 5 | Quy định đăng ký học phần dành cho sinh viên là gì? *(có `metadata_filter={"audience": "student"}`)* | `k3-course-registration::chunk_1` | 0.583 | Có — và filter loại đúng tài liệu thư viện (`audience=all`), chỉ còn 2 chunk ứng viên | Tổng hợp quy định đăng ký/điều chỉnh học phần từ [1] và [2] |
+| 1 | Để đăng ký học phần thành công trên SIS, sinh viên cần thao tác theo những bước nào và trạng thái nào xác nhận đã đăng ký xong? | `vinuni-course-registration-guide::chunk_0` — "Vào mục Academics -> Course Registration... chọn môn rồi Add và Register..." | 0.7792 | Có — đúng ở Top-1 | Vào `Academics → Course Registration`, chọn kỳ, nhấn `Add` rồi `Register`. Trạng thái phải là `Registered` mới thành công. |
+| 2 | Nếu lớp đã đầy, bị trùng lịch hoặc chưa đạt điều kiện tiên quyết khi đăng ký môn, sinh viên nên làm gì? | `vinuni-summer-2026-student-portal-registration::chunk_1` — giải thích ý nghĩa trạng thái Available, Full, Conflict | 0.7812 | Có — một phần ở Top-1, chunk hướng dẫn SIS nằm ở Top-3 (0.7550) | Kiểm tra điều kiện/lịch; khi gặp sự cố trùng lịch hoặc thiếu tiên quyết cần đổi lớp hoặc liên hệ Phòng Quản lý Đào tạo. |
+| 3 | Sinh viên đại học được mượn tối đa bao nhiêu tài liệu thư viện và trong thời hạn bao lâu? | `vinuni-library-borrowing-privileges::chunk_0` — "Sinh viên đại học được mượn tối đa 3 tài liệu, mỗi tài liệu trong thời hạn 2 tuần." | 0.7963 | Có — đúng ở Top-1 | Tối đa 3 tài liệu, mỗi tài liệu 2 tuần. |
+| 4 | Thư viện VinUni mở cửa vào giờ nào trong học kỳ, và khu nào mở 24/7? | `vinuni-library-access-services::chunk_0` — "Cổng chính T2–T6 8:00–21:00, T7–CN 9:00–17:00. Khu học tập 24/7 mở cửa liên tục." | 0.8036 | Có — đúng ở Top-1 | Cổng chính T2–T6 8:00–21:00, T7–CN 9:00–17:00; khu học tập 24/7 mở liên tục. |
+| 5 | Nếu không hoàn thành học phí đúng hạn từ một tuần, sinh viên sẽ bị hạn chế gì? *(có `metadata_filter={"department": "finance"}`)* | `vinuni-financial-regulation-2023-2024::chunk_29` — chunk chứa nội dung đặt cọc/hoàn trả, vỡ điều khoản nộp chậm | 0.8132 | Không — Top-3 chưa lấy được chunk chứa điều khoản phạt/tạm đình chỉ | Chưa thể trả lời chính xác từ Top-3 do FixedSize 500 cắt vỡ ngữ cảnh điều khoản. |
 
-**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** **5 / 5** (trong đó đúng top-1: 3/5 → tự chấm 8/10 theo thang `docs/SCORING.md`: câu 1 và 2 chỉ đạt 1 điểm vì chunk liên quan không ở top-1).
+**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** **4 / 5** (đúng Top-1: 3/5, có ở Top-3: 4/5 → tự chấm 7/10 theo thang `docs/SCORING.md`, khớp với bảng so sánh trong `REPORT_NHOM.md`).
 
 **Nhận xét về lỗi truy xuất tôi quan sát được (để mang sang phần nhóm 3.5):**
-> Cả hai câu bị mất điểm đều do cùng một nguyên nhân: `FixedSizeChunker(500)` nhồi khối chú thích "template mẫu…" của file `.md` vào **cùng chunk** với đoạn nội dung chứa đáp án, làm vector chunk bị pha loãng bởi ngôn ngữ kỹ thuật (`source_url`, `retrieved_at`, `benchmark`); trong khi `chunk_1` ngắn (196 ký tự), thuần nội dung học vụ nên có điểm cosine cao hơn dù không chứa đáp án. Hai cách sửa tôi sẽ thử ở Giai đoạn 3: (1) lọc bỏ khối boilerplate/chú thích khi ingest, (2) chuyển sang chunk theo **tiêu đề/mục** (heading) để mỗi quy định thành một chunk mạch lạc, tránh việc ranh giới 500 ký tự cắt ngang câu "…kiểm tra điều kiện | trước khi xác nhận đăng ký".
+> 1. `FixedSizeChunker(500, 50)` hoạt động tốt với các tài liệu hướng dẫn ngắn (Q1, Q3, Q4 đều đạt Top-1 với điểm cosine > 0.77).
+> 2. Tuy nhiên với tài liệu dài như Quy định tài chính (150 chunk), kích thước cố định 500 ký tự cắt vỡ ranh giới các điều khoản, làm vỡ điều khoản quy định thanh toán chậm ở Q5 khiến câu hỏi không truy xuất được chunk đúng trong Top-3 dù đã lọc `department=finance`.
+> 3. Ở Q2, FixedSizeChunker nhồi ngữ cảnh trạng thái trên Student Portal vào Top-1 (0.7812), đẩy chunk hướng dẫn đăng ký trên SIS xuống Top-3 (0.7550). Chuyển sang `RecursiveChunker` như chiến lược của nhóm sẽ khắc phục được nhược điểm này.
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
-> *(điền sau buổi demo — dự kiến ghi lại so sánh giữa chunk theo heading và chunk cố định, cùng cách các nhóm khác thiết kế schema metadata cho `audience`.)*
+> Qua so sánh chiến lược giữa các thành viên, việc kết hợp `RecursiveChunker(500)` với `metadata_filter` (như `department=finance` ở Q5) giúp giữ đúng cấu trúc các điều khoản pháp lý/quy chế dài, khắc phục triệt để lỗi cắt vỡ câu của `FixedSizeChunker`. Metadata filter loại bỏ nhiễu giữa các khối phòng ban cực kỳ hiệu quả.
 
 ---
 
@@ -190,7 +191,8 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 | Hướng tiếp cận của tôi (My Approach) | 10 / 10 |
 | Hoàn thiện code (Core Implementation — tests) | 30 / 30 (42/42 test pass) |
 | Dự đoán độ tương tự (Similarity Predictions) | 5 / 5 |
-| Kết quả truy xuất của tôi (Competition Results) | 8 / 10 |
-| **Tổng phần cá nhân** | **58 / 60** |
+| Kết quả truy xuất của tôi (Competition Results) | 7 / 10 |
+| **Tổng phần cá nhân** | **57 / 60** |
+
 
 
