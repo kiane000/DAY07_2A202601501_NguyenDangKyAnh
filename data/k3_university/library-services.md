@@ -1,18 +1,25 @@
 ---
-doc_id: k3-library-services
-title: Dịch vụ thư viện
-audience: all               # student | faculty | staff | all
+doc_id: vinuni-library-access-services
+title: Chính sách truy cập và dịch vụ thư viện
+audience: all
 department: library
+topic: library_services
 language: vi
-source_url: https://example.edu/thu-vien/dich-vu
-retrieved_at: 2026-08-02
-document_version: "2026.1"
+source_url: https://policy.vinuni.edu.vn/all-policies/library-policies-for-users/
+retrieved_at: 2026-08-03
+document_version: "2025"
 ---
 
-> Khối metadata phía trên là **template mẫu** cho K3 — thay `source_url`/`retrieved_at`/`document_version` bằng nguồn công khai thật trước khi dùng làm benchmark.
+# Chính sách truy cập và dịch vụ thư viện
 
-# Dịch vụ thư viện (dữ liệu khởi động)
+Thư viện VinUni ban hành chính sách nhằm hướng dẫn người dùng về cách sử dụng tài nguyên, dịch vụ và cơ sở vật chất của thư viện.
 
-Thư viện cung cấp mượn tài liệu và không gian học tập cho sinh viên, giảng viên và nhân viên. Người dùng cần mang thẻ định danh hợp lệ khi sử dụng dịch vụ mượn.
+Trong học kỳ, cổng chính thư viện mở cửa từ 8:00 đến 21:00 vào thứ Hai đến thứ Sáu, và từ 9:00 đến 17:00 vào thứ Bảy, Chủ nhật. Khu học tập 24/7 mở cửa liên tục. Giờ mở cửa có thể thay đổi trong kỳ thi, kỳ nghỉ và mùa hè.
 
-Nhóm cần bổ sung quy định thời hạn mượn, gia hạn và xử lý quá hạn từ nguồn chính thức trước khi dùng làm benchmark.
+Chỉ sinh viên, giảng viên và nhân viên có thẻ VinUni hợp lệ mới được vào thư viện, mượn tài liệu hoặc sử dụng tài nguyên điện tử. Người dùng không được chia sẻ thẻ VinUni cho người khác và phải xuất trình thẻ khi được yêu cầu.
+
+Người dùng cần giữ trật tự, bảo quản tài sản thư viện, không hút thuốc, không mang đồ ăn, không gây ồn và không sử dụng thiết bị âm thanh làm ảnh hưởng đến người khác. Đồ dùng cá nhân bị bỏ quên có thể được chuyển đến bộ phận Lost and Found.
+
+Tài liệu được mượn bao gồm sách thông thường, CD/DVD và sách Course Reserve theo điều kiện riêng. Tài liệu tham khảo và tạp chí không được mượn ra ngoài. Người dùng phải trả hoặc gia hạn trước hạn; tài liệu quá hạn không được gia hạn.
+
+Việc sử dụng tài nguyên điện tử chỉ dành cho sinh viên, giảng viên và nhân viên VinUni, trừ khi giấy phép tài nguyên có quy định khác. Người dùng phải sử dụng tài liệu cho mục đích cá nhân, học tập, nghiên cứu và không thương mại.
