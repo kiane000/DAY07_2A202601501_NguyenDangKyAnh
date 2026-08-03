@@ -4,7 +4,7 @@
 **Thành viên:** Nguyễn Đặng Kỳ Anh, Chu Phú Thành, Lê Thành Nam, Vũ Thành Dương, Phạm Thế Trung
 **Ngày:** 03/08/2026
 
-> **Nộp 1 bản / nhóm.** Phần cá nhân (hướng tiếp cận, kết quả riêng, dự đoán…) mỗi thành viên nộp riêng trong `REPORT_CANHAN.md`. Chi tiết thang điểm: `docs/SCORING.md`.
+> **Nộp 1 bản / nhóm.** Phần cá nhân (hướng tiếp cận, kết quả riêng, dự đoán…) mỗi thành viên nộp riêng trong folder đi theo format Tên-MSSV. Chi tiết thang điểm: `docs/SCORING.md`.
 
 **Tổng điểm phần nhóm: 40** = Lựa chọn tài liệu (10) + Thiết kế chiến lược (15) + Chất lượng truy xuất (10) + Thuyết trình (5).
 
@@ -75,34 +75,48 @@ Chạy `ChunkingStrategyComparator().compare()` trên 2-3 tài liệu:
 
 ### Chiến lược của từng thành viên
 
-> Mỗi thành viên điền một khối dưới đây (copy thêm nếu nhóm có nhiều hơn 3 người).
+> Nhóm có 5 thành viên → 5 chiến lược khác nhau: 3 chiến lược `FixedSizeChunker`, `SentenceChunker`, `RecursiveChunker`, đã chạy bằng `ChunkingStrategyComparator().compare()` ở bảng đường cơ sở trên; cộng thêm 2 chiến lược nhóm tự xây (`HeaderChunker`, `SlidingSentenceWindowChunker`, đã thêm vào `src/chunking.py`). Số liệu chunk bên dưới chạy trực tiếp trên dữ liệu thật của nhóm (`data/data_vinuni`), không cần embedder.
 
-**Cấu hình A — FixedSizeChunker (đường cơ sở)**
+**Cấu hình A — FixedSizeChunker (đường cơ sở) — Lê Thành Nam**
 
 - **Loại chiến lược:** `FixedSizeChunker(chunk_size=500, overlap=50)`.
 - **Mô tả & lý do chọn:** Đây là đường cơ sở đơn giản, đảm bảo giới hạn kích thước và có overlap để giảm mất ngữ cảnh ở ranh giới. Nó là mốc đối chiếu cho các chiến lược nhận biết cấu trúc văn bản.
 
-**Cấu hình B — SentenceChunker**
+**Cấu hình B — SentenceChunker — Chu Phú Thành**
 
 - **Loại chiến lược:** `SentenceChunker(max_sentences_per_chunk=3)`.
 - **Mô tả & lý do chọn:** Các hướng dẫn SIS và quy định thư viện thường thể hiện trọn ý trong 1–3 câu. Gom theo câu giúp giữ bước thao tác, ngoại lệ và thời gian trong cùng một chunk dễ đọc.
 
-**Cấu hình C — RecursiveChunker**
+**Cấu hình C — RecursiveChunker — Nguyễn Đặng Kỳ Anh**
 
 - **Loại chiến lược:** `RecursiveChunker(chunk_size=500)`.
 - **Mô tả & lý do chọn:** Phù hợp văn bản quy định dài có tiêu đề, đoạn và câu. Thuật toán ưu tiên tách theo cấu trúc rồi mới cắt cứng, nên giảm khả năng chia giữa ý.
 
+**Cấu hình D — HeaderChunker — Vũ Thành Dương**
+
+- **Loại chiến lược:** `HeaderChunker(chunk_size=500)` — đã thêm vào `src/chunking.py`.
+- **Mô tả & lý do chọn:** Ưu tiên ranh giới tiêu đề Markdown (`#`, `##`, `###`, …) thay vì kích thước/câu; mỗi chunk giữ nguyên tiêu đề của điều khoản/mục nó thuộc về. Phù hợp với "Quy chế đào tạo đại học" — tài liệu duy nhất trong bộ có tiêu đề `### Điều N. …` cho từng điều khoản.
+- **So với đường cơ sở (RecursiveChunker):** trên "Quy chế đào tạo đại học", Recursive cho 220 chunk (TB 348,3 ký tự, dài nhất 500); HeaderChunker cho 231 chunk (TB 366,6 ký tự, dài nhất 591 — vượt nhẹ `chunk_size` vì ưu tiên giữ trọn điều khoản kèm tiêu đề "Điều N.").
+
+**Cấu hình E — SlidingSentenceWindowChunker — Phạm Thế Trung**
+
+- **Loại chiến lược:** `SlidingSentenceWindowChunker(window_size=4, overlap=1)` — đã thêm vào `src/chunking.py`.
+- **Mô tả & lý do chọn:** Biến thể có chồng lấp của `SentenceChunker`. Với các tài liệu ngắn (hướng dẫn SIS, chính sách thư viện), việc chồng 1 câu giữa hai cửa sổ liên tiếp giảm nguy cơ mất ngữ cảnh ở đúng ranh giới nhóm câu.
+- **So với đường cơ sở (SentenceChunker):** trên "Hướng dẫn đăng ký SIS", Sentence (không chồng lấp) cho 4 chunk (TB 342,0 ký tự); SlidingSentenceWindow cho 3 chunk (TB 533,7 ký tự, dài nhất 677 — chunk dài hơn nhưng câu chuyển tiếp giữa hai bước luôn nằm chung một chunk).
+
 ### So Sánh Giữa Các Thành Viên
 
-| Thành viên                   | Chiến lược (Strategy) | Điểm truy xuất (/10) | Điểm mạnh                                                 | Điểm yếu                                                    |
-| ------------------------------ | ------------------------ | ----------------------- | ------------------------------------------------------------ | -------------------------------------------------------------- |
-| Fixed-size baseline | FixedSize 500/50 | 7 / 10 | Q1, Q3, Q4 đúng Top-1; kích thước ổn định và có overlap. | Q2 chỉ liên quan một phần ở Top-3; Q5 chưa có điều khoản đúng. |
-| Sentence 3 câu | Sentence 3 câu | 7 / 10 | Q1, Q3, Q4 đúng Top-1; Q2 có chunk hướng dẫn đúng ở Top-2. | Không lấy được điều khoản Q5 trong Top-3, dù đã lọc tài chính. |
-| Recursive 500 + filter | Recursive 500 | 9 / 10 | Q1, Q3, Q4, Q5 đúng Top-1; Q5 dùng `department=finance` lấy đúng điều khoản. | Q2 ở Top-1 mới trả lời một phần, chưa đầy đủ hướng dẫn liên hệ Phòng Quản lý Đào tạo. |
+| Thành viên | Chiến lược (Strategy) | Điểm truy xuất (/10) | Điểm mạnh | Điểm yếu |
+| --- | --- | --- | --- | --- |
+| Lê Thành Nam | FixedSize 500/50 | 7 / 10 | Q1, Q3, Q4 đúng Top-1; kích thước ổn định và có overlap. | Q2 chỉ liên quan một phần ở Top-3; Q5 chưa có điều khoản đúng. |
+| Chu Phú Thành | Sentence 3 câu | 7 / 10 | Q1, Q3, Q4 đúng Top-1; Q2 có chunk hướng dẫn đúng ở Top-2. | Không lấy được điều khoản Q5 trong Top-3, dù đã lọc tài chính. |
+| Nguyễn Đặng Kỳ Anh | Recursive 500 + filter | 9 / 10 | Q1, Q3, Q4, Q5 đúng Top-1; Q5 dùng `department=finance` lấy đúng điều khoản. | Q2 ở Top-1 mới trả lời một phần, chưa đầy đủ hướng dẫn liên hệ Phòng Quản lý Đào tạo. |
+| Vũ Thành Dương | HeaderChunker 500 | *chưa chạy* | Chunk giữ nguyên tiêu đề "Điều N." → trích dẫn nguồn rõ ràng hơn cho tài liệu quy chế dài. | Cần chạy `EMBEDDING_PROVIDER=local` + 5 câu hỏi đánh giá để có điểm/10 thật; chunk có thể vượt nhẹ `chunk_size` ở các điều dài. |
+| Phạm Thế Trung | SlidingWindow 4/1 | *chưa chạy* | Overlap theo câu giữ cặp điều kiện–ngoại lệ nằm chung chunk ở các hướng dẫn ngắn. | Cần chạy `EMBEDDING_PROVIDER=local` + 5 câu hỏi đánh giá để có điểm/10 thật; chunk dài hơn và có nội dung lặp lại giữa các chunk liền kề. |
 
 **Chiến lược nào tốt nhất cho chủ đề này? Tại sao?**
 
-> RecursiveChunker (`chunk_size=500`) là cấu hình tốt nhất trong phép chạy chung: 4 câu trả về đúng thông tin ở Top-1 và Q2 trả về thông tin liên quan nhưng thiếu một phần chi tiết, tương đương 9/10. So với SentenceChunker, RecursiveChunker tách quy định tài chính theo ranh giới đoạn tốt hơn; kết hợp filter `department=finance` đưa đúng điều khoản hạn chế đăng ký môn của Q5 lên Top-1.
+> Trong số 3 chiến lược đã có điểm truy xuất thật, RecursiveChunker (`chunk_size=500`) là cấu hình tốt nhất: 4 câu trả về đúng thông tin ở Top-1 và Q2 trả về thông tin liên quan nhưng thiếu một phần chi tiết, tương đương 9/10. So với SentenceChunker, RecursiveChunker tách quy định tài chính theo ranh giới đoạn tốt hơn; kết hợp filter `department=finance` đưa đúng điều khoản hạn chế đăng ký môn của Q5 lên Top-1. Về mặt cấu trúc chunk (không cần embedder), HeaderChunker là ứng viên đáng chú ý nhất cho tài liệu quy chế dài vì mỗi chunk tự mang tiêu đề "Điều N." — nhóm dự đoán chiến lược này sẽ giúp Q2 (yêu cầu trích đúng điều khoản liên hệ Phòng Quản lý Đào tạo) cải thiện so với Recursive, nhưng cần chạy retrieval thật để xác nhận trước khi kết luận.
 
 ---
 

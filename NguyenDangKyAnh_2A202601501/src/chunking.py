@@ -126,6 +126,111 @@ class RecursiveChunker:
             return self._split(current_text, remaining_separators[1:])
 
 
+class HeaderChunker:
+    """
+    Split Markdown text into chunks aligned with heading boundaries.
+
+    Each section starts at a heading line ("#" .. "######") and runs until
+    the next heading (or end of text); the heading is kept as a prefix on
+    every chunk it produces. Regulation articles such as "### Điều 10. Đăng
+    ký học phần" lose their meaning once separated from their title, so
+    tying chunk boundaries to headings keeps each article self-contained.
+    Sections longer than chunk_size are further split on blank-line
+    paragraph breaks, then hard-cut as a last resort.
+    """
+
+    HEADER_RE = re.compile(r'^(#{1,6})\s+(.*)$', re.MULTILINE)
+
+    def __init__(self, chunk_size: int = 500) -> None:
+        self.chunk_size = chunk_size
+
+    def chunk(self, text: str) -> list[str]:
+        if not text:
+            return []
+
+        chunks: list[str] = []
+        for header, body in self._split_sections(text):
+            content = f"{header}\n{body}".strip() if header else body.strip()
+            if not content:
+                continue
+            if len(content) <= self.chunk_size:
+                chunks.append(content)
+            else:
+                chunks.extend(self._split_long_section(header, body))
+        return chunks
+
+    def _split_sections(self, text: str) -> list[tuple[str, str]]:
+        matches = list(self.HEADER_RE.finditer(text))
+        if not matches:
+            return [("", text)]
+
+        sections: list[tuple[str, str]] = []
+        preamble = text[: matches[0].start()].strip()
+        if preamble:
+            sections.append(("", preamble))
+
+        for i, match in enumerate(matches):
+            header = match.group(0).strip()
+            body_start = match.end()
+            body_end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+            sections.append((header, text[body_start:body_end]))
+        return sections
+
+    def _split_long_section(self, header: str, body: str) -> list[str]:
+        paragraphs = [p.strip() for p in body.split("\n\n") if p.strip()]
+        chunks: list[str] = []
+        buffer = ""
+        for para in paragraphs:
+            candidate = f"{buffer}\n\n{para}" if buffer else para
+            if len(header) + len(candidate) + 1 <= self.chunk_size:
+                buffer = candidate
+                continue
+            if buffer:
+                chunks.append(f"{header}\n{buffer}".strip())
+                buffer = ""
+            if len(header) + len(para) + 1 <= self.chunk_size:
+                buffer = para
+            else:
+                for i in range(0, len(para), self.chunk_size):
+                    chunks.append(f"{header}\n{para[i : i + self.chunk_size]}".strip())
+        if buffer:
+            chunks.append(f"{header}\n{buffer}".strip())
+        return chunks
+
+
+class SlidingSentenceWindowChunker:
+    """
+    Group sentences into overlapping windows instead of disjoint batches.
+
+    Unlike SentenceChunker (non-overlapping groups of N sentences),
+    consecutive windows share `overlap` sentences, so a rule split across a
+    sentence boundary (a condition in one sentence, its exception in the
+    next) still appears together in at least one chunk.
+    """
+
+    def __init__(self, window_size: int = 4, overlap: int = 1) -> None:
+        self.window_size = max(1, window_size)
+        self.overlap = max(0, min(overlap, self.window_size - 1))
+
+    def chunk(self, text: str) -> list[str]:
+        if not text:
+            return []
+        sentences = [s.strip() for s in re.split(r'(?<=[.!?])\s+|\.\n', text) if s.strip()]
+        if not sentences:
+            return [text.strip()] if text.strip() else []
+
+        step = self.window_size - self.overlap
+        chunks: list[str] = []
+        for start in range(0, len(sentences), step):
+            window = sentences[start : start + self.window_size]
+            if not window:
+                break
+            chunks.append(" ".join(window))
+            if start + self.window_size >= len(sentences):
+                break
+        return chunks
+
+
 def _dot(a: list[float], b: list[float]) -> float:
     return sum(x * y for x, y in zip(a, b))
 

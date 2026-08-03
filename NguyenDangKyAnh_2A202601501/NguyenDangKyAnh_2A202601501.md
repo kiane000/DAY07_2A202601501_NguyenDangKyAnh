@@ -164,15 +164,17 @@ tests/test_solution.py::TestEmbeddingStoreDeleteDocument::test_delete_returns_tr
 
 Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src`. **5 câu hỏi này phải trùng với các thành viên cùng nhóm** (xem `REPORT_NHOM.md`).
 
+> **Cấu hình chạy:** `EMBEDDING_PROVIDER=local` · `RecursiveChunker(chunk_size=500)` · `BENCHMARK_CHUNKER=recursive python benchmark.py` (Q5 dùng `metadata_filter={"department": "finance"}`).
+
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
 |---|-------|--------------------------------|-------|-----------|------------------------|
-| 1 |  |  |  |  |  |
-| 2 |  |  |  |  |  |
-| 3 |  |  |  |  |  |
-| 4 |  |  |  |  |  |
-| 5 |  |  |  |  |  |
+| 1 | Để đăng ký học phần thành công trên SIS, sinh viên cần thao tác theo những bước nào và trạng thái nào xác nhận đã đăng ký xong? | `vinuni-course-registration-guide`, chunk 0 — vào `Academics → Course Registration`, chọn kỳ, `Add` rồi `Register`, trạng thái phải là `Registered`. | 0,7915 | Có — đúng ở Top-1 | Đúng: nêu đủ các bước và trạng thái `Registered`. |
+| 2 | Nếu lớp đã đầy, bị trùng lịch hoặc chưa đạt điều kiện tiên quyết khi đăng ký môn, sinh viên nên làm gì? | `vinuni-course-registration-guide`, chunk 2 — gặp lỗi/lớp đầy/trùng lịch/thiếu tiên quyết thì liên hệ Phòng Quản lý Đào tạo. | 0,7518 | Có — Top-1 nhưng chỉ đúng một phần | Nêu được ý liên hệ Phòng Quản lý Đào tạo, còn thiếu chi tiết SIS không có danh sách chờ. |
+| 3 | Sinh viên đại học được mượn tối đa bao nhiêu tài liệu thư viện và trong thời hạn bao lâu? | `vinuni-library-borrowing-privileges`, chunk 0 — tối đa 3 tài liệu, mỗi tài liệu 2 tuần. | 0,7923 | Có — đúng ở Top-1 | Đúng: tối đa 3 tài liệu, mỗi tài liệu 2 tuần. |
+| 4 | Thư viện VinUni mở cửa vào giờ nào trong học kỳ, và khu nào mở 24/7? | `vinuni-library-access-services`, chunk 0 — cổng chính T2–T6 8:00–21:00, T7–CN 9:00–17:00; khu học tập 24/7. | 0,7844 | Có — đúng ở Top-1 | Đúng: nêu đủ giờ mở cửa và khu học tập 24/7. |
+| 5 | Nếu không hoàn thành học phí đúng hạn từ một tuần, sinh viên sẽ bị hạn chế gì? *(có `metadata_filter={"department": "finance"}`)* | `vinuni-financial-regulation-2023-2024` — điều khoản tạm đình chỉ học và không được đăng ký môn kỳ tiếp theo. | 0,7919 | Có — đúng ở Top-1 nhờ lọc `department=finance` | Đúng: nêu đúng tạm đình chỉ học và hạn chế đăng ký môn kỳ sau. |
 
-**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** **5** / 5
+**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** **5** / 5 (đúng Top-1 và câu trả lời đầy đủ: 4/5; Q2 đúng Top-1 nhưng câu trả lời agent còn thiếu chi tiết → tự chấm 9/10 theo thang `docs/SCORING.md`).
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
 > *Viết 2-3 câu:*  
@@ -188,5 +190,5 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 | Hướng tiếp cận của tôi (My Approach) | 10 / 10 |
 | Hoàn thiện code (Core Implementation — tests) | 30 / 30 |
 | Dự đoán độ tương tự (Similarity Predictions) | 5 / 5 |
-| Kết quả truy xuất của tôi (Competition Results) | 10 / 10 |
-| **Tổng phần cá nhân** | **60 / 60** |
+| Kết quả truy xuất của tôi (Competition Results) | 9 / 10 |
+| **Tổng phần cá nhân** | **59 / 60** |
